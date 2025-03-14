@@ -48,20 +48,19 @@ const Carousel: React.FC<Props> = ({
   const [isRightArrow, setIsRightArrow] = useState(true);
 
   useEffect(() => {
-    if (!infinite) {
-      if (-pos + carouselWidth === itemWidth * images.length) {
-        setIsRightArrow(false);
-      } else {
-        setIsRightArrow(true);
-      }
+    if (infinite) {
+      setIsLeftArrow(true);
+      setIsRightArrow(true);
 
-      if (pos === 0) {
-        setIsLeftArrow(false);
-      } else {
-        setIsLeftArrow(true);
-      }
+      return;
     }
-  }, [pos]);
+
+    const isAtEnd = -pos + carouselWidth >= itemWidth * images.length;
+    const isAtStart = pos === 0;
+
+    setIsRightArrow(!isAtEnd);
+    setIsLeftArrow(!isAtStart);
+  }, [pos, infinite]);
   const handleClick = (direct: Direct) => () => {
     const fullLength = itemWidth * images.length;
     let newPos = 0;
